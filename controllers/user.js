@@ -31,7 +31,7 @@ exports.login = (req, res, next) => {
             res.status(200).json({
                 userId: user._id,
                 //token: 'TOKEN' remplacé par la fonction sign
-                oken: jwt.sign(
+                token: jwt.sign(
                     { userId: user._id },
                     'RANDOM_TOKEN_SECRET', // <= écran ou cours => RANDOM_SECRET_KEY ? 
                     { expiresIn: '24h' }
