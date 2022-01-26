@@ -25,7 +25,7 @@ app.use(express.json()); //équivalent à app.use(bodyParser.json());
 
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
-app.use('/api/sauces', sauceRoutes);// à vérifier sauce ou sauces rdx ?
+app.use('/api/sauces', sauceRoutes);// à vérifier sauces 
 app.use('/api/auth', userRoutes);
 
 module.exports = app; 
