@@ -6,6 +6,9 @@ const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
 
+// helmet à vérifier rdx
+const helmet = require('helmet');
+
 const sauceRoutes = require('./routes/sauce');
 const userRoutes = require('./routes/user');
 
@@ -17,6 +20,12 @@ mongoose.connect(process.env.DB_HOST+'://'+process.env.DB_USER+':'+process.env.D
   .catch(() => console.log('Connexion à MongoDB échouée !'));
 
 const app = express();
+
+// helmet à vérifier rdx
+// const helmet = require('helmet');
+// app.use(helmet());
+app.use(helmet.crossOriginResourcePolicy({ policy: 'cross-origin' }));
+// app.disable('x-powered-by');
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
