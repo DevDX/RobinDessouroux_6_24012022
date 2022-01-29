@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+ 
 const thingSchema = mongoose.Schema({
   userId: { type: String, required: true }, //  l'identifiant MongoDB unique de l'utilisateur qui a créé la sauce
   name: { type: String, required: true }, //  nom de la sauce
@@ -14,4 +14,5 @@ const thingSchema = mongoose.Schema({
   usersDisliked: { type: [String]} // tableau des identifiants des utilisateurs qui n'ont pas aimé (= disliked) la sauce
 });
 
+// console.log("thingSchema :" +thingSchema);//test en dev
 module.exports = mongoose.model('Thing', thingSchema);  //console.log("passé par Thing.js");

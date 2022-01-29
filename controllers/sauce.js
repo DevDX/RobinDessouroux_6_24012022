@@ -1,6 +1,8 @@
 const Sauce = require('../models/Thing');
 const fs = require('fs');
-console.log("ok passé ici sauce.js ligne 3");
+
+console.log("ok passé ici sauce.js ligne 3");// test en dev
+
 exports.createSauce  = (req, res, next) => { 
   const sauceObject = JSON.parse(req.body.sauce);
   //delete req.body._id;
@@ -71,69 +73,70 @@ exports.getAllSauces = (req, res, next) => {
     });
 };
 
-  // cas des likes et dislikes
-  exports.likeDislike = (req, res, next) => { 
+// cas des likes et dislikes
+exports.likeDislike = (req, res, next) => { 
+  
+  switch (req.body.like) {
+
+    // case 1 pour like
+    case 1:
+      Sauce.updateOne(
+        { _id: req.params.id },
+        { $push: { usersLiked: req.body.userId }, // $push ajoute une valeur spécifiée à un tableau
+          $inc: { likes: +1 } // $inc incrémente un champ d'une valeur spécifiée 
+        })
+        .then(() => res.status(200).json({ message: 'like +1' }))
+        .catch((error) => res.status(400).json({ error }));
+      break;
+
+    // case -1 pour dislike
+    case -1:
+      Sauce.updateOne(
+        { _id: req.params.id },
+        { $push: { usersDisliked: req.body.userId },  // $push ajoute une valeur spécifiée à un tableau
+          $inc: { dislikes: +1 } // $inc incrémente un champ d'une valeur spécifiée 
+        })
+        .then(() => {
+          res.status(200).json({ message: 'dislike +1' })
+        })
+        .catch((error) => res.status(400).json({ error }));
+      break;
+
+    // case 0 décrémentation du like ou du dislike
+    case 0:
+      Sauce.findOne({ _id: req.params.id })
+        .then((sauce) => {
+          if (sauce.usersLiked.includes(req.body.userId)) { // ici l'utilisateur avait aimé 
+            Sauce.updateOne(
+              { _id: req.params.id },
+              { $pull: { usersLiked: req.body.userId }, // $push ajoute une valeur spécifiée à un tableau
+                $inc: { likes: -1 } // $inc incrémente un champ d'une valeur spécifiée
+              })
+              .then(() =>
+                res.status(200).json({ message: 'suppression du like' })
+              )
+              .catch((error) => res.status(400).json({ error }));
+          }
+          if (sauce.usersDisliked.includes(req.body.userId)) {  // ici l'utilisateur n'avait pas aimé 
+            Sauce.updateOne(
+              { _id: req.params.id },
+              {
+                $pull: { usersDisliked: req.body.userId },  // $push ajoute une valeur spécifiée à un tableau
+                $inc: { dislikes: -1 }, // $inc incrémente un champ d'une valeur spécifiée
+              })
+              .then(() =>
+                res.status(200).json({ message: 'suppression du dislike' })
+              )
+              .catch((error) => res.status(400).json({ error }));
+          }
+        })
+        .catch((error) => res.status(404).json({ error }));
+      break;
+
     
-    switch (req.body.like) {
 
-      // case 1 pour like
-      case 1:
-        Sauce.updateOne(
-          { _id: req.params.id },
-          { $push: { usersLiked: req.body.userId }, // $push ajoute une valeur spécifiée à un tableau
-            $inc: { likes: +1 } // $inc incrémente un champ d'une valeur spécifiée 
-          })
-          .then(() => res.status(200).json({ message: 'like +1' }))
-          .catch((error) => res.status(400).json({ error }));
-        break;
+    default:
+      console.log(error); // vérifier si impératif, présent dans la doc mdn rdx
+  }
+};
 
-      // case -1 pour dislike
-      case -1:
-        Sauce.updateOne(
-          { _id: req.params.id },
-          { $push: { usersDisliked: req.body.userId },  // $push ajoute une valeur spécifiée à un tableau
-            $inc: { dislikes: +1 } // $inc incrémente un champ d'une valeur spécifiée 
-          })
-          .then(() => {
-            res.status(200).json({ message: 'dislike +1' })
-          })
-          .catch((error) => res.status(400).json({ error }));
-        break;
-  
-      // case 0 décrémentation du like ou du dislike
-      case 0:
-        Sauce.findOne({ _id: req.params.id })
-          .then((sauce) => {
-            if (sauce.usersLiked.includes(req.body.userId)) { // ici l'utilisateur avait aimé 
-              Sauce.updateOne(
-                { _id: req.params.id },
-                { $pull: { usersLiked: req.body.userId }, // $push ajoute une valeur spécifiée à un tableau
-                  $inc: { likes: -1 } // $inc incrémente un champ d'une valeur spécifiée
-                })
-                .then(() =>
-                  res.status(200).json({ message: 'suppression du like' })
-                )
-                .catch((error) => res.status(400).json({ error }));
-            }
-            if (sauce.usersDisliked.includes(req.body.userId)) {  // ici l'utilisateur n'avait pas aimé 
-              Sauce.updateOne(
-                { _id: req.params.id },
-                {
-                  $pull: { usersDisliked: req.body.userId },  // $push ajoute une valeur spécifiée à un tableau
-                  $inc: { dislikes: -1 }, // $inc incrémente un champ d'une valeur spécifiée
-                })
-                .then(() =>
-                  res.status(200).json({ message: 'suppression du dislike' })
-                )
-                .catch((error) => res.status(400).json({ error }));
-            }
-          })
-          .catch((error) => res.status(404).json({ error }));
-        break;
-  
-      
-  
-      default:
-        console.log(error); // vérifier si impératif, présent dans la doc mdn rdx
-    }
-  };
