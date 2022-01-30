@@ -18,6 +18,19 @@ exports.createSauce  = (req, res, next) => {
 };
   
 exports.modifySauce = (req, res, next) => {
+  // cas particulier SI NOUVELLE IMAGE alors enlever la précédente - - - - -
+  if (req.file) {
+    Sauce.findOne({ _id: req.params.id }).then((sauce) => {
+      const filename = sauce.imageUrl.split('/images/')[1];
+      fs.unlink(`images/${filename}`, (err) => {
+        if (err) console.log(err);
+        else {
+          console.log('image précédente retirée ' + filename);
+        }
+      });
+    });
+  }
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     const sauceObject = req.file ?
     {
       ...JSON.parse(req.body.sauce),

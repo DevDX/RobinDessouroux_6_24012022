@@ -7,7 +7,7 @@ let passwordSchema = new passwordValidator();
 passwordSchema
 .is().min(8)                                    // Minimum length 8
 .is().max(12)                                   // Maximum length 12
-.has().uppercase()                              // Must have uppercase letters
+.has().uppercase(1)                              // Must have 1 uppercase letter
 .has().lowercase()                              // Must have lowercase letters
 .has().digits(1)                                // Must have at least 1 digit
 .has().not().spaces()                           // Should not have spaces
@@ -25,7 +25,9 @@ console.log(schema.validate('joke', { list: true }));
 // => [ 'min', 'uppercase', 'digits' ]
 */
 
-module.exports = (req, res,next) => {
+
+module.exports = (req, res, next) => {
+    console.log(req.body.password);
     if(passwordSchema.validate(req.body.password)){
         next();
     }else{
