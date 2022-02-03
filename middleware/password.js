@@ -27,7 +27,7 @@ console.log(schema.validate('joke', { list: true }));
 
 
 module.exports = (req, res, next) => {
-    console.log(req.body.password);
+    //console.log(req.body.password);
     if(passwordSchema.validate(req.body.password)){
         next();
     }else{

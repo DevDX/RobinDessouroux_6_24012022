@@ -1,4 +1,4 @@
-const multer = require('multer'); //  devrait être bon à vérifier rdx
+const multer = require('multer'); 
 
 const MIME_TYPES = {
   'image/jpg': 'jpg',

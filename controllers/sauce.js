@@ -1,7 +1,7 @@
 const Sauce = require('../models/Thing');
 const fs = require('fs');
 
-console.log("ok passé ici sauce.js ligne 3");// test en dev
+//console.log("ok passé ici sauce.js ligne 3");// test en dev
 
 exports.createSauce  = (req, res, next) => { 
   const sauceObject = JSON.parse(req.body.sauce);
@@ -53,14 +53,10 @@ exports.deleteSauce = (req, res, next) => {
       .catch(error => res.status(400).json({ error }));
       });
     })
-  .catch(error => res.status(500).json({ error })); //pour la partie 4
+  .catch(error => res.status(500).json({ error }));  
 };
 
-  // exports.getOneSauce = (req, res, next) => {
-  //   Sauce.findOne({ _id: req.params.id })
-  //     .then(Sauce => res.status(200).json({ sauce: Sauce }))
-  //     .catch(error => res.status(404).json({ error }));
-  // };
+
 
 exports.getOneSauce = (req, res, next) => {
       Sauce.findOne({ _id: req.params.id })
@@ -68,11 +64,7 @@ exports.getOneSauce = (req, res, next) => {
         .catch((error) => { res.status(404).json({ error: error });});
 };
 
-  // exports.getAllSauces = (req, res, next) => {
-  //   Sauce.find()
-  //     .then(Sauce => res.status(200).json({ sauces: Sauce}))
-  //     .catch(error => res.status(400).json({ error }));
-  // };
+  
 
 exports.getAllSauces = (req, res, next) => {
   Sauce.find()

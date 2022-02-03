@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-console.log("ici auth.js ligne2");//test en dev
+//console.log("ici auth.js ligne2");//test en dev
 
 module.exports = (req, res, next) => {
   try {

@@ -6,7 +6,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
 
-// helmet à vérifier rdx
+// helmet 
 const helmet = require('helmet');
 
 const sauceRoutes = require('./routes/sauce');
@@ -21,7 +21,7 @@ mongoose.connect(process.env.DB_HOST+'://'+process.env.DB_USER+':'+process.env.D
 
 const app = express();
 
-// helmet à vérifier rdx
+// helmet 
 // const helmet = require('helmet');
 // app.use(helmet());
 app.use(helmet.crossOriginResourcePolicy({ policy: 'cross-origin' }));
@@ -38,7 +38,7 @@ app.use(express.json()); //équivalent à app.use(bodyParser.json());
 
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
-app.use('/api/sauces', sauceRoutes);// à vérifier sauces 
+app.use('/api/sauces', sauceRoutes);
 app.use('/api/auth', userRoutes);
 
 module.exports = app; 
